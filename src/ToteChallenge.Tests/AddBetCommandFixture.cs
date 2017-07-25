@@ -15,8 +15,7 @@ namespace ToteChallenge.Tests
             Assert.Throws<ArgumentException>(() => command.Execute(null));
 
             command.Type = "w";
-            command.Stake = -1;
-            command.Runner = "1";
+            command.Runner = "";
 
             Assert.Throws<ArgumentException>(() => command.Execute(null));
         }

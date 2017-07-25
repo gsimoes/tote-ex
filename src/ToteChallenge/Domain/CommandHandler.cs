@@ -1,11 +1,11 @@
 ﻿namespace ToteChallenge.Domain
 {
-    public class ToteCommandHandler
+    public class CommandHandler
     {
         private readonly ICommandParser _commandParser;
         private readonly Tote _context;
 
-        public ToteCommandHandler(ICommandParser commandParser, Tote context)
+        public CommandHandler(ICommandParser commandParser, Tote context)
         {
             _commandParser = commandParser;
             _context = context;

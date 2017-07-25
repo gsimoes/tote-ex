@@ -12,10 +12,14 @@ namespace ToteChallenge.Domain
         private readonly Dictionary<string, ConcurrentDictionary<string, decimal>> _poolsStakesPerRunner = new Dictionary<string, ConcurrentDictionary<string, decimal>>();
         private readonly ConcurrentDictionary<string, decimal> _poolsTotalStake = new ConcurrentDictionary<string, decimal>();
 
+        public bool Open { get; private set; }
+
         public Tote(IEnumerable<BetPool> betPools)
         {
             _betPools = betPools
                 .ToDictionary(betPool => betPool.Type);
+
+            Open = true;
 
             InitialisePools();
         }
@@ -72,8 +76,19 @@ namespace ToteChallenge.Domain
             }
 
             var betPool = _betPools[type];
+            var totalStakeForRunner = TotalStakeForRunner(type, runner);
 
-            return Math.Round(TotalStakeForType(type) * betPool.StakeFactor / TotalStakeForRunner(type, runner), 2);
+            if (totalStakeForRunner == 0)
+            {
+                return 0;
+            }
+
+            return Math.Round(TotalStakeForType(type) * betPool.StakeFactor / totalStakeForRunner, 2);
+        }
+
+        public void CloseTote()
+        {
+            Open = false;
         }
     }
 }

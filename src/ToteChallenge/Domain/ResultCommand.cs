@@ -17,6 +17,8 @@ namespace ToteChallenge.Domain
             Console.WriteLine($"Place:{Second}:${context.GetResult("p", Second.ToString())}");
             Console.WriteLine($"Place:{Third}:${context.GetResult("p", Third.ToString())}");
             Console.WriteLine($"Exacta:{First},{Second}:${context.GetResult("e", $"{First},{Second}")}");
+
+            context.CloseTote();
         }
     }
 }

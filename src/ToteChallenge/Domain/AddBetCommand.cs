@@ -24,7 +24,9 @@ namespace ToteChallenge.Domain
 
             if (Stake <= 0)
             {
-                throw new ArgumentException("Invalid stake. Should be higher than 0.");
+                Console.WriteLine("Invalid stake. Should be higher than 0.");
+
+                return;
             }
 
             context.AddBet(Type, Runner, Stake);

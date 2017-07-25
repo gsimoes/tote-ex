@@ -7,7 +7,7 @@ namespace ToteChallenge.Domain
         Command Parse(string input);
     }
 
-    public class ToteCommandParser : ICommandParser
+    public class CommandParser : ICommandParser
     {
         public Command Parse(string input)
         {

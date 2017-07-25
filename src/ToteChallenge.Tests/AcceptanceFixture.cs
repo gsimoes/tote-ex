@@ -57,7 +57,7 @@ namespace ToteChallenge.Tests
                 new BetPool("e", 0.82m),
             });
 
-            var toteCommandHandler = new ToteCommandHandler(new ToteCommandParser(), tote);
+            var toteCommandHandler = new CommandHandler(new CommandParser(), tote);
 
             _commands.ForEach(toteCommandHandler.Execute);
 
