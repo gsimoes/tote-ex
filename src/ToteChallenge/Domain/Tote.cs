@@ -31,7 +31,7 @@ namespace ToteChallenge.Domain
 
         public void AddBet(string type, string runner, int stake)
         {
-            if (!_poolsTotalStake.ContainsKey(type))
+            if (!_betPools.ContainsKey(type))
             {
                 throw new ArgumentException("Bet pool does not exist.");
             }
@@ -44,7 +44,7 @@ namespace ToteChallenge.Domain
 
         public decimal TotalStakeForType(string type)
         {
-            if (!_poolsTotalStake.ContainsKey(type))
+            if (!_betPools.ContainsKey(type))
             {
                 throw new ArgumentException("Bet pool does not exist.");
             }
@@ -54,7 +54,7 @@ namespace ToteChallenge.Domain
 
         public decimal TotalStakeForRunner(string type, string runner)
         {
-            if (!_poolsStakesPerRunner.ContainsKey(type))
+            if (!_betPools.ContainsKey(type))
             {
                 throw new ArgumentException("Bet pool does not exist.");
             }
@@ -62,6 +62,18 @@ namespace ToteChallenge.Domain
             return _poolsStakesPerRunner[type].ContainsKey(runner)
                 ? _poolsStakesPerRunner[type][runner]
                 : 0;
+        }
+
+        public decimal GetResult(string type, string runner)
+        {
+            if (!_betPools.ContainsKey(type))
+            {
+                throw new ArgumentException("Bet pool does not exist.");
+            }
+
+            var betPool = _betPools[type];
+
+            return Math.Round(TotalStakeForType(type) * betPool.StakeFactor / TotalStakeForRunner(type, runner), 2);
         }
     }
 }

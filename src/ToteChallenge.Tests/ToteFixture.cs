@@ -49,5 +49,23 @@ namespace ToteChallenge.Tests
 
             Assert.AreEqual(0, tote.TotalStakeForRunner("w", "2"));
         }
+
+        [Test]
+        public void When_getting_results_should_calculate_using_stakes_factor()
+        {
+            var tote = new Tote(new[]
+            {
+                new BetPool("w", 0.88m),
+            });
+
+            tote.AddBet(type: "w", runner: "1", stake: 4);
+            tote.AddBet(type: "w", runner: "2", stake: 10);
+
+            var expectedRunner1 = Math.Round((4 + 10) * 0.88m / 4, 2);
+            var expectedRunner2 = Math.Round((4 + 10) * 0.88m / 10, 2);
+
+            Assert.AreEqual(expectedRunner1, tote.GetResult(type: "w", runner: "1"));
+            Assert.AreEqual(expectedRunner2, tote.GetResult(type: "w", runner: "2"));
+        }
     }
 }
