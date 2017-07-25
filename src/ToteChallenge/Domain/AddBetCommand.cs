@@ -1,16 +1,33 @@
-﻿namespace ToteChallenge.Domain
+﻿using System;
+
+namespace ToteChallenge.Domain
 {
     public class AddBetCommand : Command
     {
-        public override void Execute(Tote context)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public string Type { get; set; }
 
-        public string Runners { get; set; }
+        public string Runner { get; set; }
 
-        public decimal TotalStake { get; set; }
+        public decimal Stake { get; set; }
+
+        public override void Execute(Tote context)
+        {
+            if (string.IsNullOrEmpty(Type))
+            {
+                throw new ArgumentException(nameof(Type));
+            }
+
+            if (string.IsNullOrEmpty(Runner))
+            {
+                throw new ArgumentException(nameof(Runner));
+            }
+
+            if (Stake <= 0)
+            {
+                throw new ArgumentException("Invalid stake. Should be higher than 0.");
+            }
+
+            context.AddBet(Type, Runner, Stake);
+        }
     }
 }

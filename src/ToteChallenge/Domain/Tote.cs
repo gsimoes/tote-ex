@@ -29,7 +29,7 @@ namespace ToteChallenge.Domain
             }
         }
 
-        public void AddBet(string type, string runner, int stake)
+        public void AddBet(string type, string runner, decimal stake)
         {
             if (!_betPools.ContainsKey(type))
             {

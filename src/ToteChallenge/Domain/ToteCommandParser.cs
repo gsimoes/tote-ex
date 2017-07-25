@@ -32,8 +32,8 @@ namespace ToteChallenge.Domain
                 return new AddBetCommand
                 {
                     Type = matchResult.Groups["betType"].Value,
-                    Runners = matchResult.Groups["runners"].Value,
-                    TotalStake = decimal.Parse(matchResult.Groups["stake"].Value)
+                    Runner = matchResult.Groups["runners"].Value,
+                    Stake = decimal.Parse(matchResult.Groups["stake"].Value)
                 };
             }
 

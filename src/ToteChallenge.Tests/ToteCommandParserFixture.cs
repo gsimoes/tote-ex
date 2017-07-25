@@ -26,8 +26,8 @@ namespace ToteChallenge.Tests
                 Assert.NotNull(command);
 
                 Assert.That(command.Type == "w");
-                Assert.That(command.Runners == "1");
-                Assert.That(command.TotalStake == 12);
+                Assert.That(command.Runner == "1");
+                Assert.That(command.Stake == 12);
             }
 
             [Test]
