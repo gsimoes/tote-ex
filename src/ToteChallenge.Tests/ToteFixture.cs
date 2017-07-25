@@ -4,39 +4,19 @@ using ToteChallenge.Domain;
 namespace ToteChallenge.Tests
 {
     [TestFixture]
-    public class ToteCommandParserFixture
+    public class ToteFixture
     {
-        public class ParseTests : ToteCommandParserFixture
+        public class AddBetTests : ToteFixture
         {
             [Test]
-            public void When_input_empty_or_null_returns_null()
+            public void When_add_win_bet_updates_tote_count_and_total_win()
             {
-                var toteCommandParser = new ToteCommandParser();
-                var command = toteCommandParser.Parse("");
+                var tote = new Tote();
 
-                Assert.IsNull(command);
+                tote.AddBet(type: "w", runners: "1", stake: 4);
 
-                command = toteCommandParser.Parse(null);
-
-                Assert.IsNull(command);
-            }
-
-            [Test]
-            public void When_bet_input_returns_bet_command()
-            {
-                var toteCommandParser = new ToteCommandParser();
-                var command = toteCommandParser.Parse("bet:W:1:12");
-
-                Assert.That(command is AddBetCommand);
-            }
-
-            [Test]
-            public void When_result_input_returns_result_command()
-            {
-                var toteCommandParser = new ToteCommandParser();
-                var command = toteCommandParser.Parse("result:1:2:3");
-
-                Assert.That(command is ResultCommand);
+                Assert.That(tote.TotalCountForRunner("w", "1") == 1);
+                Assert.That(tote.TotalStakeForType("w") == 4);
             }
         }
     }
