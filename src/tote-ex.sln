@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToteChallenge", "ToteChallenge\ToteChallenge.csproj", "{17404270-7901-4CE6-9517-60D2A1A46A26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToteChallenge", "ToteChallenge\ToteChallenge.csproj", "{17404270-7901-4CE6-9517-60D2A1A46A26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToteChallenge.Tests", "ToteChallenge.Tests\ToteChallenge.Tests.csproj", "{4197FC44-FB62-4BAE-8EDD-280498A0BCD1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToteChallenge.Tests", "ToteChallenge.Tests\ToteChallenge.Tests.csproj", "{4197FC44-FB62-4BAE-8EDD-280498A0BCD1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

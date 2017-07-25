@@ -1,60 +1,67 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ToteChallenge.Domain
 {
     public class Tote
     {
-        private readonly Dictionary<string, ConcurrentDictionary<string, int>> _poolsCounts = new Dictionary<string, ConcurrentDictionary<string, int>>();
-        private readonly ConcurrentDictionary<string, decimal> _poolsTotals = new ConcurrentDictionary<string, decimal>();
+        private readonly IDictionary<string, BetPool> _betPools;
 
-        public Tote()
+        private readonly Dictionary<string, ConcurrentDictionary<string, decimal>> _poolsStakesPerRunner = new Dictionary<string, ConcurrentDictionary<string, decimal>>();
+        private readonly ConcurrentDictionary<string, decimal> _poolsTotalStake = new ConcurrentDictionary<string, decimal>();
+
+        public Tote(IEnumerable<BetPool> betPools)
         {
-            CreatePool("w"); // win
-            CreatePool("p"); // place
-            CreatePool("e"); // exacta
+            _betPools = betPools
+                .ToDictionary(betPool => betPool.Type);
+
+            InitialisePools();
         }
 
-        private void CreatePool(string type)
+        private void InitialisePools()
         {
-            if (!_poolsCounts.ContainsKey(type))
+            foreach (var betPool in _betPools)
             {
-                _poolsCounts.Add(type, new ConcurrentDictionary<string, int>());
-                _poolsTotals.AddOrUpdate(type, 0, (oldKey, oldValue) => 0);
+                _poolsStakesPerRunner.Add(betPool.Value.Type.ToLower(), new ConcurrentDictionary<string, decimal>());
+                _poolsTotalStake.AddOrUpdate(betPool.Value.Type, 0, (oldKey, oldValue) => 0);
             }
         }
 
-        public void AddBet(string type, string runners, int stake)
+        public void AddBet(string type, string runner, int stake)
         {
-            if (!_poolsCounts.ContainsKey(type) || !_poolsTotals.ContainsKey(type))
+            if (!_poolsTotalStake.ContainsKey(type))
             {
-                return;
+                throw new ArgumentException("Bet pool does not exist.");
             }
 
-            var poolCounts = _poolsCounts[type];
-            poolCounts.AddOrUpdate(runners, 1, (key, current) => current + 1);
+            var runnerStakes = _poolsStakesPerRunner[type];
+            runnerStakes.AddOrUpdate(runner, stake, (key, current) => current + stake);
 
-            _poolsTotals.AddOrUpdate(type, stake, (key, current) => current + stake);
-        }
-
-        public int TotalCountForRunner(string type, string runner)
-        {
-            if (!_poolsCounts.ContainsKey(type) || !_poolsCounts[type].ContainsKey(runner))
-            {
-                return 0;
-            }
-
-            return _poolsCounts[type][runner];
+            _poolsTotalStake.AddOrUpdate(type, stake, (key, current) => Math.Round(current + stake));
         }
 
         public decimal TotalStakeForType(string type)
         {
-            if (!_poolsTotals.ContainsKey(type))
+            if (!_poolsTotalStake.ContainsKey(type))
             {
-                return 0;
+                throw new ArgumentException("Bet pool does not exist.");
             }
 
-            return _poolsTotals[type];
+            return _poolsTotalStake[type];
+        }
+
+        public decimal TotalStakeForRunner(string type, string runner)
+        {
+            if (!_poolsStakesPerRunner.ContainsKey(type))
+            {
+                throw new ArgumentException("Bet pool does not exist.");
+            }
+
+            return _poolsStakesPerRunner.ContainsKey(runner)
+                ? _poolsStakesPerRunner[type][runner]
+                : 0;
         }
     }
 }
