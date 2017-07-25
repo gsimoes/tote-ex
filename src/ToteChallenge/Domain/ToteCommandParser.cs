@@ -1,27 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace ToteChallenge.Domain
 {
-    public class ToteCommandParser
+    public interface ICommandParser
     {
-        private IDictionary<string, Func<string[], ToteCommand>> _commandFactory;
+        Command Parse(string input);
+    }
 
-        public ToteCommandParser()
-        {
-            _commandFactory = new Dictionary<string, Func<string[], ToteCommand>>()
-            {
-                { "bet", CreateAddBetCommand },
-                { "result", CreateResultCommand }
-            };
-        }
-
-        public ToteCommand Parse(string input)
+    public class ToteCommandParser : ICommandParser
+    {
+        public Command Parse(string input)
         {
             if (string.IsNullOrEmpty(input))
             {
-                return null;
+                return new ErrorCommand();
             }
 
             var matchResult = Regex.Match(input.ToLower().Trim(),
@@ -30,21 +22,27 @@ namespace ToteChallenge.Domain
 
             if (!matchResult.Success)
             {
-                return null;
+                return new ErrorCommand();
             }
 
             var command = matchResult.Groups["command"].Value;
-            return _commandFactory[command](null);
-        }
 
-        private static AddBetCommand CreateAddBetCommand(string[] args)
-        {
-            return new AddBetCommand();
-        }
+            if (command == "bet")
+            {
+                return new AddBetCommand
+                {
+                    Type = matchResult.Groups["betType"].Value,
+                    Runners = matchResult.Groups["runners"].Value,
+                    TotalStake = decimal.Parse(matchResult.Groups["stake"].Value)
+                };
+            }
 
-        private static ResultCommand CreateResultCommand(string[] args)
-        {
-            return new ResultCommand();
+            return new ResultCommand
+            {
+                First = int.Parse(matchResult.Groups["first"].Value),
+                Second = int.Parse(matchResult.Groups["second"].Value),
+                Third = int.Parse(matchResult.Groups["third"].Value)
+            };
         }
     }
 }

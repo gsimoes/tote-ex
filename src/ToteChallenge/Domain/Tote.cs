@@ -59,7 +59,7 @@ namespace ToteChallenge.Domain
                 throw new ArgumentException("Bet pool does not exist.");
             }
 
-            return _poolsStakesPerRunner.ContainsKey(runner)
+            return _poolsStakesPerRunner[type].ContainsKey(runner)
                 ? _poolsStakesPerRunner[type][runner]
                 : 0;
         }

@@ -12,8 +12,8 @@ namespace ToteChallenge.Tests
         {
             var tote = new Tote(new[]
             {
-                    new BetPool("w", 1),
-                });
+                new BetPool("w", 1),
+            });
 
             tote.AddBet(type: "w", runner: "1", stake: 4);
 
