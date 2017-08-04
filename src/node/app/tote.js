@@ -58,23 +58,29 @@ module.exports = class Tote {
     }
 
     getResults(first, second, third) {
+        var $this = this;
+
         var result = {
             first: first,
             second: second,
             third: third
         };
 
-        return this.betPools
-            .map(function (betPool) {
-                betPool.results = [];
+        var results = [];
 
-                betPool.results = betPool
-                    .resultsFor
-                    .map(function (position) {
-                        return getResult(betPool.type, result[position])
-                    });
+        Object.keys(this.betPools).forEach(function(key,index) {
+            var betPool = $this.betPools[key];
+            betPool.results = [];
 
-                return betPool;
-            });
+            betPool.results = betPool
+                .resultsFor
+                .map(function (position) {
+                    return $this.getResult(betPool.type, position(result));
+                });
+            
+            results.push(betPool);
+        });
+
+        return results;
     }
 }

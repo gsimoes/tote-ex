@@ -3,7 +3,7 @@ var chai = require("chai"),
     assert = chai.assert;
 
 var CommandParser = require("../app/commandParser.js"),
-    Commands = require("../app/commands.js")
+    Commands = require("../app/commands.js");
 
 describe("command parser", function () {
     describe("when input invalid", function () {
