@@ -20,4 +20,22 @@ class ErrorCommand extends Command {
     }
 }
 
-module.exports = { Command, ErrorCommand }
+class BetCommand extends Command {
+    constructor(type, runner, stake) {
+        super();
+
+        this.type = type;
+        this.runner = runner;
+        this.stake = stake;
+    }
+
+    execute(tote) {
+        
+    }
+
+    toString() {
+        return `${this.type} | ${this.runner} | ${this.stake}`;
+    }
+}
+
+module.exports = { Command, ErrorCommand, BetCommand }
