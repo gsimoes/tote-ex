@@ -30,7 +30,7 @@ class BetCommand extends Command {
     }
 
     execute(tote) {
-        
+        tote.addBet(this.type, this.runner, this.stake);
     }
 
     toString() {
@@ -38,4 +38,24 @@ class BetCommand extends Command {
     }
 }
 
-module.exports = { Command, ErrorCommand, BetCommand }
+class ResultCommand extends Command {
+    constructor(first, second, third) {
+        super();
+
+        this.first = first;
+        this.second = second;
+        this.third = third;
+    }
+
+    execute(tote) {
+       var betPools = tote.getResults(this.first, this.second, this.third);
+
+       console.log(betPools);
+    }
+
+    toString() {
+        return `${this.first} | ${this.second} | ${this.third}`;
+    }
+}
+
+module.exports = { Command, ErrorCommand, BetCommand, ResultCommand }

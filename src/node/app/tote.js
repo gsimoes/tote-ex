@@ -50,11 +50,31 @@ module.exports = class Tote {
         var betPool = this.betPools[type];
         var stakeForRunner = this.totalStakeForRunner(type, runner);
 
-        if (stakeForRunner == 0)
-        {
+        if (stakeForRunner == 0) {
             return 0;
         }
 
         return Number((this.totalStakeForType(type) * betPool.stakeFactor / stakeForRunner).toFixed(2));
+    }
+
+    getResults(first, second, third) {
+        var result = {
+            first: first,
+            second: second,
+            third: third
+        };
+
+        return this.betPools
+            .map(function (betPool) {
+                betPool.results = [];
+
+                betPool.results = betPool
+                    .resultsFor
+                    .map(function (position) {
+                        return getResult(betPool.type, result[position])
+                    });
+
+                return betPool;
+            });
     }
 }
